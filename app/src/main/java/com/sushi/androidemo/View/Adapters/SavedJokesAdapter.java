@@ -1,29 +1,34 @@
-package com.sushi.androidemo.View;
+package com.sushi.androidemo.View.Adapters;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
+
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.sushi.androidemo.Model.Joke;
 import com.sushi.androidemo.R;
+
+import java.util.ArrayList;
 
 public class SavedJokesAdapter extends RecyclerView.Adapter<SavedJokesAdapter.SavedJokesViewHolder>  {
 
-    private String[] jokes;
+    private ArrayList<Joke> jokes;
+    private Context context;
 
-    public SavedJokesAdapter(String[] jokes) {
+    public SavedJokesAdapter(Context context, ArrayList<Joke> jokes) {
         this.jokes = jokes;
+        this.context = context;
     }
 
     public static class SavedJokesViewHolder extends RecyclerView.ViewHolder {
-        // each data item is just a string in this case
         public View itemJoke;
 
         public SavedJokesViewHolder(View item) {
             super(item);
-            itemJoke = item;
+            this.itemJoke = item;
         }
     }
 

@@ -1,6 +1,8 @@
-package com.sushi.androidemo.View;
+package com.sushi.androidemo.View.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,14 +11,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.sushi.androidemo.Model.Joke;
 import com.sushi.androidemo.R;
+import com.sushi.androidemo.ViewModel.JokeViewModel;
 
 public class JokeActivity extends AppCompatActivity {
 
     Button buttonNext;
     Button buttonSave;
-    Button buttonGoSaves;
+    Button buttonOpenSaveJokes;
     TextView tvJoke;
+    JokeViewModel jokeViewModel;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,6 +29,7 @@ public class JokeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_joke);
         setUpButtons();
         setUpTextViews();
+        initJokeViewModel();
     }
 
     public void setUpButtons(){
@@ -31,7 +37,7 @@ public class JokeActivity extends AppCompatActivity {
         buttonNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View View) {
-                changeJoke();
+                jokeViewModel.changeJoke(getApplication());
             }
         });
 
@@ -39,15 +45,15 @@ public class JokeActivity extends AppCompatActivity {
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View View) {
-                saveJoke();
+                jokeViewModel.saveJoke();
             }
         });
 
-        buttonGoSaves = findViewById(R.id.goSaves);
-        buttonGoSaves.setOnClickListener(new View.OnClickListener() {
+        buttonOpenSaveJokes = findViewById(R.id.openSaveJokes);
+        buttonOpenSaveJokes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View View) {
-                showSavedJoke();
+                openSavedJokes();
             }
         });
     }
@@ -56,20 +62,20 @@ public class JokeActivity extends AppCompatActivity {
         tvJoke = findViewById(R.id.joke);
     }
 
-    public void changeJoke(){
-        if(tvJoke.getText().equals("HOLA MUNDO mi amigo del alma")){
-            tvJoke.setText("HOLA MUNDO");
-        }else{
-            tvJoke.setText("HOLA MUNDO mi amigo del alma");
-        }
-        Log.e("text size", ""+tvJoke.getTextSize());
+    public void initJokeViewModel(){
+        jokeViewModel = new ViewModelProvider(this).get(JokeViewModel.class);
+        jokeViewModel.init(this);
+        final Observer<Joke> joke = new Observer<Joke>(){
+            @Override
+            public void onChanged(Joke joke) {
+                Log.e("joke", "-------"+joke.getText());
+                tvJoke.setText(joke.getText());
+            }
+        };
+        jokeViewModel.getJoke().observe(this, joke);
     }
 
-    public void saveJoke(){
-
-    }
-
-    public void showSavedJoke(){
+    public void openSavedJokes(){
         Intent intent = new Intent(this, SavedJokesActivity.class);
         startActivity(intent);
     }

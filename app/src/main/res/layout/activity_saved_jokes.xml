@@ -4,6 +4,32 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".SavedJokesActivity">
+    tools:context=".View.Activities.SavedJokesActivity"
+    android:background="@color/black">
+
+    <Button
+        android:id="@+id/goBack"
+        android:layout_width="150dp"
+        android:layout_height="46dp"
+        android:layout_marginTop="24dp"
+        android:background="@drawable/rounded_corners_1"
+        android:text="GO BACK"
+        android:textColor="@color/black"
+        android:textFontWeight="900"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.099"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/jokes_list"
+        android:layout_width="359dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.191" />
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
