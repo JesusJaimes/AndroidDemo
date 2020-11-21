@@ -1,16 +1,17 @@
-package com.sushi.androidemo;
+package com.sushi.androidemo.View;
 
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.os.Build;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+import com.sushi.androidemo.R;
+
+public class JokeActivity extends AppCompatActivity {
 
     Button buttonNext;
     Button buttonSave;
@@ -20,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_joke);
         setUpButtons();
         setUpTextViews();
     }
@@ -69,6 +70,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void showSavedJoke(){
-
+        Intent intent = new Intent(this, SavedJokesActivity.class);
+        startActivity(intent);
     }
 }
