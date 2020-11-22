@@ -1,41 +1,44 @@
 package com.sushi.androidemo.ViewModel;
 
 
+import android.app.Application;
 import android.content.Context;
 
+import androidx.lifecycle.AndroidViewModel;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
-
 import com.sushi.androidemo.Model.Joke;
-import com.sushi.androidemo.Rspositories.JokeRopository;
+import com.sushi.androidemo.Repositories.JokeRepository;
 
-public class JokeViewModel extends ViewModel {
+import java.util.List;
+
+public class JokeViewModel extends AndroidViewModel {
 
     private MutableLiveData<Joke> joke;
-    private JokeRopository repository;
+    private final LiveData<List<Joke>> allJokes;
+    JokeRepository repository ;
 
-    public void init(Context context){
-        if(joke!=null){
-            return;
-        }
-        repository = JokeRopository.getInstance();
-        joke = repository.getJoke(context);
+
+    public JokeViewModel(Application application) {
+        super(application);
+        this.repository = new JokeRepository(application);
+        this.joke = new MutableLiveData<>();
+        this.allJokes = repository.getAllJokes();
     }
 
-    public LiveData<Joke> getJoke(){
-        return joke;
+    public LiveData<Joke> getJoke() {
+        return this.joke;
     }
 
-    public void changeJoke(Context context){
-        joke = repository.getJoke(context);
+    public void setNewJoke(Context context){
+        this.repository.setNewJoke(joke, context);
     }
+
+    public LiveData<List<Joke>> getAllJokes() { return allJokes; }
 
     public void saveJoke(){
-
-    }
-
-    public void setNewJoke(){
-
+        Joke joke = this.joke.getValue();
+        this.repository.insert(joke);
     }
 }

@@ -1,17 +1,15 @@
 package com.sushi.androidemo.View.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Parcelable;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.sushi.androidemo.Model.Joke;
 import com.sushi.androidemo.R;
 import com.sushi.androidemo.ViewModel.JokeViewModel;
 
@@ -37,7 +35,7 @@ public class JokeActivity extends AppCompatActivity {
         buttonNext.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View View) {
-                jokeViewModel.changeJoke(getApplication());
+                changeJoke();
             }
         });
 
@@ -45,7 +43,7 @@ public class JokeActivity extends AppCompatActivity {
         buttonSave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View View) {
-                jokeViewModel.saveJoke();
+                saveJoke();
             }
         });
 
@@ -53,7 +51,7 @@ public class JokeActivity extends AppCompatActivity {
         buttonOpenSaveJokes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View View) {
-                openSavedJokes();
+                openSavedJokesActivity();
             }
         });
     }
@@ -63,20 +61,25 @@ public class JokeActivity extends AppCompatActivity {
     }
 
     public void initJokeViewModel(){
-        jokeViewModel = new ViewModelProvider(this).get(JokeViewModel.class);
-        jokeViewModel.init(this);
-        final Observer<Joke> joke = new Observer<Joke>(){
-            @Override
-            public void onChanged(Joke joke) {
-                Log.e("joke", "-------"+joke.getText());
+        jokeViewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication())).get(JokeViewModel.class);
+        jokeViewModel.getJoke().observe(this, joke -> {
+            if(joke!=null){
                 tvJoke.setText(joke.getText());
             }
-        };
-        jokeViewModel.getJoke().observe(this, joke);
+        });
+        jokeViewModel.setNewJoke(this);
     }
 
-    public void openSavedJokes(){
-        Intent intent = new Intent(this, SavedJokesActivity.class);
+    public void changeJoke(){
+        jokeViewModel.setNewJoke(this);
+    }
+
+    public void saveJoke(){
+        jokeViewModel.saveJoke();
+    }
+
+    public void openSavedJokesActivity(){
+        Intent intent = new Intent(this, JokesListActivity.class);
         startActivity(intent);
     }
 }
