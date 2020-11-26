@@ -4,21 +4,18 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import com.sushi.androidemo.R;
 import com.sushi.androidemo.View.Adapters.JokesListAdapter;
-import com.sushi.androidemo.ViewModel.JokeViewModel;
-
-import java.util.ArrayList;
+import com.sushi.androidemo.ViewModel.JokeListViewModel;
 
 public class JokesListActivity extends AppCompatActivity {
 
     Button buttonGoBack;
     RecyclerView jokesList;
-    JokeViewModel jokeViewModel;
+    JokeListViewModel jokeListViewModel;
     JokesListAdapter jokesListAdapter;
 
     @Override
@@ -49,9 +46,8 @@ public class JokesListActivity extends AppCompatActivity {
     }
 
     public void initSavedJokesViewModel(){
-        Intent intent = getIntent();
-        jokeViewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication())).get(JokeViewModel.class);
-        jokeViewModel.getAllJokes().observe(this, jokes -> {
+        jokeListViewModel = new ViewModelProvider(this, ViewModelProvider.AndroidViewModelFactory.getInstance(this.getApplication())).get(JokeListViewModel.class);
+        jokeListViewModel.getAllJokes().observe(this, jokes -> {
             jokesListAdapter.submitList(jokes);
         });
     }
